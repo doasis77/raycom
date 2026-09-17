@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raycom-Web-Dialer</title>
+    <script src="https://cdn.jsdelivr.net/npm/sip.js@0.20.0/dist/sip.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .dial-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #eee;
+        }
+        #number-display {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .call-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        #call-btn, #hangup-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #call-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        #hangup-btn {
+            background: #f44336;
+            color: white;
+            display: none;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .connected {
+            background: #dff0d8;
+            color: #3c763d;
+        }
+        .disconnected {
+            background: #f2dede;
+            color: #a94442;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Raycom-Web-Dialer</h1>
+        
+        <div>
+            <label for="sip-uri">SIP URI:</label>
+            <input type="text" id="sip-uri" value="1001@demo.raycomtechnologies.net" style="width: 100%; padding: 8px; margin: 5px 0;">
+        </div>
+        
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" value="P#$$w0rd" style="width: 100%; padding: 8px; margin: 5px 0;">
+        </div>
+        
+        <button id="connect-btn">Connect</button>
+        <button id="disconnect-btn" disabled>Disconnect</button>
+        
+        <div id="status" class="status disconnected">Disconnected</div>
+        
+        <input type="text" id="number-display" placeholder="Enter number" readonly>
+        
+        <div class="dial-pad">
+            <button class="dial-btn">1</button>
+            <button class="dial-btn">2</button>
+            <button class="dial-btn">3</button>
+            <button class="dial-btn">4</button>
+            <button class="dial-btn">5</button>
+            <button class="dial-btn">6</button>
+            <button class="dial-btn">7</button>
+            <button class="dial-btn">8</button>
+            <button class="dial-btn">9</button>
+            <button class="dial-btn">*</button>
+            <button class="dial-btn">0</button>
+            <button class="dial-btn">#</button>
+        </div>
+        
+        <div class="call-controls">
+            <button id="call-btn">Call</button>
+            <button id="hangup-btn">Hang Up</button>
+        </div>
+        
+        <div id="call-status"></div>
+    </div>
+
+    <script src="backend/sip.js"></script>
+</body>
+</html>

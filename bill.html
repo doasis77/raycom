@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bill Amegah | About Me</title>
+  <style>
+    :root {
+      --beige: #f5f5dc;
+      --accent: #d8cbb2;
+      --text: #333;
+      --highlight: #b89e77;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--beige);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background-color: var(--accent);
+      padding: 1rem 2rem;
+      text-align: center;
+      animation: fadeInDown 1s ease;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      margin: 0 10px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--highlight);
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .about-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .about-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      flex: 2;
+    }
+
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .profile img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--highlight);
+      margin-bottom: 1rem;
+    }
+
+    .content {
+      text-align: center;
+    }
+
+    .form-section {
+      background-color: #fefaf0;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      flex: 1;
+    }
+
+    .form-section h3 {
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .form-section form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-section input {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .form-section button {
+      background-color: var(--highlight);
+      color: white;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .form-section button:hover {
+      background-color: #9e845f;
+    }
+
+    .skills ul {
+      list-style-type: none;
+      padding-left: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .skills li {
+      background-color: var(--accent);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 500;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .skills li:hover {
+      transform: scale(1.05);
+    }
+
+    .story {
+      background-color: #fefaf0;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      animation: slideIn 1s ease;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: var(--accent);
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Responsive Layout */
+    @media (min-width: 768px) {
+      .about-wrapper {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      .content {
+        text-align: left;
+        max-width: 100%;
+      }
+
+      #callLink {
+  margin: 0 10px;
+  padding: 6px 12px;
+  background: var(--highlight);
+  color: var(--text);
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+#callLink:hover {
+  background: #9e845f;
+}
+
+
+      .profile {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Bill Amegah</h1>
+          <nav>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#story">Story</a>
+        <a href="index.html" id="callLink">Call</a>
+      </nav>
+  </header>
+
+  <main>
+    <div class="about-wrapper" id="about">
+      <section class="about-section">
+        <div class="profile">
+          <img src="79268047_e08003ef68_b.jpg" alt="Bill Amegah" />
+        </div>
+        <div class="content">
+          <h2>About Me</h2>
+          <p>
+            I’m a driven and curious software developer from Ghana with a strong passion for full-stack development, robotics, and innovative tech solutions. I enjoy solving real-world problems and making an impact through clean, efficient code.
+          </p>
+        </div>
+      </section>
+
+      <aside class="form-section">
+        <h3>Search by First Name</h3>
+        <form id="searchForm">
+          <input type="text" name="first_name" placeholder="First Name" required />
+          <button type="submit">Search</button>
+        </form>
+      </aside>
+    </div>
+
+    <section id="skills" class="skills">98
+      <h2>My Skills</h2>
+      <ul>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>React</li>
+        <li>Flask</li>
+        <li>Node.js</li>
+        <li>PostgreSQL</li>
+        <li>MongoDB</li>
+        <li>Python</li>
+        <li>Docker</li>
+      </ul>
+    </section>
+
+    <section id="story" class="story">
+      <h2>My Story</h2>
+      <p>
+        Growing up, I was always fascinated by how machines work. My journey began when I took apart a broken radio just to see what was inside. Years later, that same curiosity drove me into the world of software development.
+      </p>
+      <p>
+        One of the turning points in my life was building a <strong>Sign Language Translator</strong> using Flask and JavaScript. It wasn’t just about code — it was about creating something that mattered. Since then, I’ve worked on everything from emergency alert systems to canteen ordering platforms.
+      </p>
+      <p>
+        I believe that technology can change lives — and I’m here to build the future, one line of code at a time.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Bill Amegah. All rights reserved.</p>
+  </footer>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('searchForm');
+    const dataList = document.createElement('div');
+    form.after(dataList);
+    // Ensure results area is empty on page load
+    dataList.innerHTML = '';
+
+    // Fetch and display search results
+    async function loadData(first_name) {
+      let url = 'http://localhost:7050/myself';
+      if (first_name) {
+        url += `?first_name=${encodeURIComponent(first_name)}`;
+      }
+      const res = await fetch(url);
+      const data = await res.json();
+      let html = '<h3>Results:</h3><ul>';
+      if (data.length === 0) {
+        html += '<li>No results found.</li>';
+      } else {
+        data.forEach(entry => {
+          html += `<li>${entry.first_name} ${entry.last_name} - ${entry.role} (${entry.department}, ${entry.university})</li>`;
+        });
+      }
+      html += '</ul>';
+      dataList.innerHTML = html;
+    }
+
+    // Form submission handler
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const first_name = formData.get('first_name');
+      loadData(first_name);
+    });
+  });
+</script>
+
+</body>
+</html>

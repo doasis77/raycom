@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<!-- 
+    liveChat.html
+    Standalone Live Chat page
+-->
+
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Live Chat</title>
+	<link rel="stylesheet" href="liveChat.css">
+	<link rel="stylesheet" href="jquery-ui-1.11.4.custom/jquery-ui.min.css">
+	<script src="jquery-1.11.3/jquery.min.js" type="text/javascript"></script>
+	<script src="jquery-ui-1.11.4.custom/jquery-ui.min.js" type="text/javascript"></script>
+
+	<!-- Chat configuration and logic -->
+	<script src="js/links.js"></script>
+	<script src="js/global.js"></script>
+	<script src="js/webChatConfig.js"></script>
+	<script src="js/webChatSocket.js"></script>
+	<script src="js/webChat.js"></script>
+	<script src="js/webChatLogon.js"></script>
+	<script src="js/checkQueue.js"></script>
+	<script src="js/dialcodes.js"></script>
+</head>
+<body>
+	<input type="hidden" name="skillSet" id="pageSkillSet" value="" />
+
+	<div class="header">
+		<div class="menu">
+			<a href="home.html">Home</a>
+		</div>
+	</div>
+
+	<div class="main">
+		<!-- Container id matches queue-check expectations -->
+		<div id="chatPanel" class="elevated-card">
+			<div class="chatHeader">
+				<div class="chatTitle">
+					<h2>Live Chat</h2>
+					<p class="subtitle">We’re here to help</p>
+				</div>
+				<div class="status">
+					<span id="statusDot" class="statusDot statusConnecting"></span>
+					<span id="statusText">Connecting…</span>
+				</div>
+			</div>
+			<!-- Logon form -->
+			<div id="chatForm">
+				<table class="formTable">
+					<tr>
+						<td class="formLabel">Name</td>
+						<td class="formField"><input type="text" id="user-chat"></td>
+						<td class="formLabel">Country, Area Code and Phone</td>
+						<td><select id="country-chat" class="formField"></select> <input type="text" id="area-chat" class="areaInput"> <input type="text" id="phone-chat" class="phoneInput"></td>
+					</tr>
+					<tr>
+						<td class="formLabel">E-mail</td>
+						<td class="formField"><input type="text" id="email-chat"></td>
+						<td class="formLabel">Address</td>
+						<td class="formField"><input type="text" id="address-chat"></td>
+					</tr>
+
+					<tr>
+						<td class="formLabel">Skillset</td>
+						<td class="formField"><select id="skillset-chat">
+								<!-- Populated on load -->
+							</select></td>
+					</tr>
+
+					<tr>
+						<td class="formLabel center" colspan="2"><input type="checkbox" id="transcript-chat"> Email the chat transcript to me</td>
+						<td class="formLabel"></td>
+						<td class="formField center">
+							<button id="openbutton-chat" onclick="gatherDetails()" class="button">Chat Now</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!-- Chat interface -->
+			<div id="chatInterface" style="display:none">
+				<div id="messages"></div>
+
+				<div id="usersDiv">
+					<div id="participants">
+						<div class="hidden">
+							<img src="" class="hidden">
+						</div>
+						<div class="hidden">
+							<img src="" class="hidden">
+						</div>
+						<div class="hidden">
+							<img src="" class="hidden">
+						</div>
+					</div>
+				</div>
+
+				<div id="controls">
+					<div class="controlsRow">
+						<button type="button" class="iconButton" id="toggleEmoji" title="Emoji">🙂</button>
+						<input type="text" id="outmessage" class="chatField" placeholder="Type a message">
+						<span id="charCount" class="charCount">0</span>
+						<button type="button" id="sendbutton-chat" onclick="sendChatMessage()" class="button primary">Send</button>
+						<button type="button" id="closebutton-chat" onclick="quitChat()" class="button subtle">Close</button>
+					</div>
+
+					<div id="emojiPicker" class="emojiPicker" aria-hidden="true">
+						<button class="emoji" type="button">😀</button>
+						<button class="emoji" type="button">😂</button>
+						<button class="emoji" type="button">😊</button>
+						<button class="emoji" type="button">👍</button>
+						<button class="emoji" type="button">🙏</button>
+						<button class="emoji" type="button">🎉</button>
+						<button class="emoji" type="button">💡</button>
+						<button class="emoji" type="button">❓</button>
+						<button class="emoji" type="button">✅</button>
+						<button class="emoji" type="button">❤️</button>
+						<button class="emoji" type="button">😎</button>
+						<button class="emoji" type="button">🤖</button>
+					</div>
+
+					<div id="pagePushDiv" class="fold-out-pagepush">
+						<input type="url" class="urlField" id="urlInput" placeholder="https://example.com">
+						<button type="button" id="sendurl-chat" onclick="sendPagePushRequest()" class="button">Send Link</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		// Initialize UI widgets
+		$('.button').button();
+		// Populate country codes and available skillsets (via REST)
+		$(function() {
+			startQueueCheck();
+			switchFormToLogon();
+
+			// Emoji picker toggle
+			$('#toggleEmoji').on('click', function() {
+				$('#emojiPicker').slideToggle(120);
+			});
+
+			// Insert emoji into message
+			$('#emojiPicker').on('click', '.emoji', function() {
+				var emoji = $(this).text();
+				var $input = $('#outmessage');
+				$input.val($input.val() + emoji).focus();
+				$('#charCount').text($input.val().length);
+			});
+
+			// Character counter
+			$('#outmessage').on('input', function() {
+				$('#charCount').text(this.value.length);
+			});
+
+			// Connection status updater
+			function updateConnectionStatus() {
+				try {
+					if (window.webSocket) {
+						var state = window.webSocket.readyState;
+						var $dot = $('#statusDot');
+						var $text = $('#statusText');
+						if (state === 1) { // OPEN
+							$dot.removeClass('statusConnecting statusClosed').addClass('statusOnline');
+							$text.text('Online');
+						} else if (state === 0) { // CONNECTING
+							$dot.removeClass('statusOnline statusClosed').addClass('statusConnecting');
+							$text.text('Connecting…');
+						} else { // CLOSING or CLOSED
+							$dot.removeClass('statusOnline statusConnecting').addClass('statusClosed');
+							$text.text('Disconnected');
+						}
+					}
+				} catch (e) {}
+			}
+			updateConnectionStatus();
+			setInterval(updateConnectionStatus, 1000);
+		});
+	</script>
+
+</body>
+</html>
+
+
