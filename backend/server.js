@@ -10,19 +10,29 @@ const port = process.env.PORT || 7050;
 app.use(cors());
 app.use(express.json());
 
-if (!process.env.DB_PASSWORD) {
-  console.warn('Warning: DB_PASSWORD not set. Database connection may fail.');
+function createPool() {
+  if (process.env.DATABASE_URL) {
+    return new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    });
+  }
+
+  if (!process.env.DB_PASSWORD) {
+    console.warn('Warning: set DATABASE_URL (Neon) or DB_PASSWORD for local PostgreSQL.');
+  }
+
+  return new Pool({
+    user: process.env.DB_USER || 'postgres',
+    host: process.env.DB_HOST || 'localhost',
+    database: process.env.DB_NAME || 'doasis',
+    password: process.env.DB_PASSWORD,
+    port: parseInt(process.env.DB_PORT || '5432', 10),
+  });
 }
 
-const pool = new Pool({
-  user: process.env.DB_USER || 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  database: process.env.DB_NAME || 'doasis',
-  password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT || '5432', 10),
-});
+const pool = createPool();
 
-// Fix 1: Match table columns with what you want to store
 async function createmyselfTable() {
   try {
     const query = `
@@ -89,6 +99,9 @@ app.get('/myself', async (req, res) => {
   }
 });
 
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK' });
+});
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
