@@ -1,19 +1,25 @@
+require('dotenv').config();
+
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
 
 const app = express();
-const port = 7050;
+const port = process.env.PORT || 7050;
 
 app.use(cors());
 app.use(express.json());
 
+if (!process.env.DB_PASSWORD) {
+  console.warn('Warning: DB_PASSWORD not set. Database connection may fail.');
+}
+
 const pool = new Pool({
-  user: 'postgres',
-  host: '172.31.161.208',
-  database: 'doasis',
-  password: 'StrongPassw0rd!',
-  port: 5432,
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'doasis',
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT || '5432', 10),
 });
 
 // Fix 1: Match table columns with what you want to store
